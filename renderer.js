@@ -2,10 +2,18 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 var fs = require('fs');
+const path = require('path');
 var holder = document.getElementById('holder');
 const {remote} = require('electron')
 const {Menu, MenuItem} = remote
 const ipcRenderer = require('electron').ipcRenderer;
+
+
+var infoView = $('#info');
+var content1 = $('<p> <span>导出地址:</span><input type="text" value="'+path.join(__dirname, '/outfnt/images2fnt.exe') +'"></p>');
+var content2 = $('<p> <span>导出地址:</span><input type="text" value="'+ path.resolve('outfnt', 'images2fnt.exe') +'"></p>');
+infoView.append(content1)
+infoView.append(content2)
 
 holder.ondragover = function () {
   return false;

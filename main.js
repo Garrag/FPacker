@@ -13,6 +13,21 @@ const fs = require('fs')
 let mainWindow
 var dataMap = []; //图片数据
 
+//打包exe的位置
+var packEXEPath = path.resolve('outfnt', 'images2fnt.exe');
+//缓存文件夹
+var tempPath =  path.resolve('temp')
+//最终输出位置
+var outPath =  path.resolve('outfnt')
+
+
+console.log('---------------------------------------------')
+console.log(packEXEPath)
+console.log(tempPath)
+console.log(outPath)
+console.log('---------------------------------------------')
+
+
 //打包处理
 function packFunc(){
     console.log('start packer!!!!!!');
@@ -31,7 +46,7 @@ function packFunc(){
 //到处处理
 function daochuFunction(){
   // 移动打包软件
-  fs.writeFileSync(path.join(__dirname, '/temp/images2fnt.exe'), fs.readFileSync(path.join(__dirname, '/outfnt/images2fnt.exe')));
+  fs.writeFileSync(path.join(__dirname, '/temp/images2fnt.exe'), fs.readFileSync(path.join(__dirname, '/outfnt/images2fnt.exe')) );
   // 复制图片到指定文件夹
   for (var i=0; i<dataMap.length; i++) {
       var element = dataMap[i];
@@ -56,7 +71,7 @@ function createWindow () {
     }))
     
     // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
 
     //添加一个图片
     ipcMain.on('handel-fnt-img', function(event, arg) {
