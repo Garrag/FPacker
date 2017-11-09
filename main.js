@@ -4,7 +4,7 @@ const Menu = electron.Menu
 const MenuItem = electron.MenuItem
 const ipcMain = require('electron').ipcMain;
 const BrowserWindow = electron.BrowserWindow
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 
 const path = require('path')
 const url = require('url')
@@ -13,45 +13,64 @@ const fs = require('fs')
 let mainWindow
 var dataMap = []; //图片数据
 
+var exeName = 'images2fnt.exe';
+var runName = 'run.bat'
 //打包exe的位置
-var packEXEPath = path.resolve('outfnt', 'images2fnt.exe');
+var packEXEPath = path.resolve('resources', exeName);
 //缓存文件夹
-var tempPath =  path.resolve('temp')
+var tempPath =  path.resolve('resources', 'temp')
 //最终输出位置
-var outPath =  path.resolve('outfnt')
+var runBatPath =  path.resolve('resources', runName)
+var outPath =  path.resolve('resources', 'output')
 
+// console.log('---------------------------------------------')
+// console.log(packEXEPath)
+// console.log(tempPath)
+// console.log(runBatPath)
+// console.log('---------------------------------------------')
 
-console.log('---------------------------------------------')
-console.log(packEXEPath)
-console.log(tempPath)
-console.log(outPath)
-console.log('---------------------------------------------')
+//复制文件
+var copyFile = function(src, dst) {
+  fs.writeFileSync(dst, fs.readFileSync(src));
+}
+//删除文件夹
+function deleteAll(path) {  
+  var files = [];  
+  if(fs.existsSync(path)) {  
+      files = fs.readdirSync(path);  
+      files.forEach(function(file, index) {  
+          var curPath = path + "/" + file;  
+          if(fs.statSync(curPath).isDirectory()) { // recurse  
+              deleteAll(curPath);  
+          } else { // delete file  
+              fs.unlinkSync(curPath);  
+          }  
+      });  
+      // fs.rmdirSync(path);  
+  }  
+};  
 
 
 //打包处理
 function packFunc(){
-    console.log('start packer!!!!!!');
+    console.log('run bat ===== ', path.join(tempPath, runName));
     // 执行run脚本 启动打包exe
-    exec('run', function(err,stdout,stderr){
-        if(err) {
-            console.log('get weather api error:' + stderr);
-        } else {
-            console.log('packer OK!!!')
-            fs.writeFileSync(path.join(__dirname, '/outfnt/fnt.png'), fs.readFileSync(path.join(__dirname, '/temp/output/fnt.png')));                 
-            fs.writeFileSync(path.join(__dirname, '/outfnt/fnt.fnt'), fs.readFileSync(path.join(__dirname, '/temp/output/fnt.fnt')));  
-        }
-    });
+    execSync('cd resources/temp && run');
+    copyFile(path.join(tempPath, 'output', 'fnt.fnt'), path.join(outPath, 'fnt.fnt'))
+    copyFile(path.join(tempPath, 'output', 'fnt.png'), path.join(outPath, 'fnt.png'))
 }
 
 //到处处理
 function daochuFunction(){
-  // 移动打包软件
-  fs.writeFileSync(path.join(__dirname, '/temp/images2fnt.exe'), fs.readFileSync(path.join(__dirname, '/outfnt/images2fnt.exe')) );
+  deleteAll(tempPath)
+  deleteAll(outPath)
+  copyFile(packEXEPath, path.join(tempPath, exeName))
+  copyFile(runBatPath, path.join(tempPath, runName))
   // 复制图片到指定文件夹
   for (var i=0; i<dataMap.length; i++) {
       var element = dataMap[i];
       var asc = element.zifu.charCodeAt(0);
-      fs.writeFileSync(path.join(__dirname, '/temp/fnt_' + asc + '.png'), fs.readFileSync(element.path));
+      copyFile(element.path, path.join(tempPath, 'fnt_' + asc + '.png'))
       if(i == dataMap.length-1){
           packFunc()
       }

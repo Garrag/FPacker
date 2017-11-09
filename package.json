@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "packageWin": "electron-packager . 'FntPacker' --platform=win32 --arch=x64 --out=./dist --asar --app-version=1.7.8 --ignore=\"(dist|src|docs|.gitignore|LICENSE|README.md|webpack.config.js|node_modules|outfnt|temp|run.bat)\""
+    "packageWin": "electron-packager . FntPacker --platform=win32 --arch=x64 --out=./dist --asar --app-version=1.7.8 --ignore=\"(dist|src|docs|.gitignore|LICENSE|README.md|webpack.config.js|node_modules|outfnt|temp|run.bat|resources)\""
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [

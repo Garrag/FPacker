@@ -9,11 +9,11 @@ const {Menu, MenuItem} = remote
 const ipcRenderer = require('electron').ipcRenderer;
 
 
-var infoView = $('#info');
-var content1 = $('<p> <span>导出地址:</span><input type="text" value="'+path.join(__dirname, '/outfnt/images2fnt.exe') +'"></p>');
-var content2 = $('<p> <span>导出地址:</span><input type="text" value="'+ path.resolve('outfnt', 'images2fnt.exe') +'"></p>');
-infoView.append(content1)
-infoView.append(content2)
+// var infoView = $('#info');
+// var content1 = $('<p> <span>导出地址:</span><input type="text" value="'+path.join(__dirname, '/outfnt/images2fnt.exe') +'"></p>');
+// var content2 = $('<p> <span>导出地址:</span><input type="text" value="'+ path.resolve('outfnt', 'images2fnt.exe') +'"></p>');
+// infoView.append(content1)
+// infoView.append(content2)
 
 holder.ondragover = function () {
   return false;
